@@ -1,4 +1,4 @@
-package com.shiro.Auth;
+package shiro.realm;
 
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -16,7 +16,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class CostomRealm extends AuthorizingRealm {
+public class CustomRealm extends AuthorizingRealm {
     Map<String,String> usermap = new HashMap<String, String>();
     {
         usermap.put("sa","f647e02a69ab0e51780373f86f89a12a");
