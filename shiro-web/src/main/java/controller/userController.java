@@ -1,4 +1,4 @@
-package com.shiro.controller;
+package controller;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -14,7 +14,8 @@ import po.User;
 @Controller
 public class userController {
 
-    @RequestMapping(value = "/subLogin" , method = RequestMethod.POST)
+    @RequestMapping(value = "/subLogin" , method = RequestMethod.POST,
+    produces = "application/json;charset=utf-8")
     @ResponseBody
     public String subLogin(User user){
         Subject subject = SecurityUtils.getSubject();
