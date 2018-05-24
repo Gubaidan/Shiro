@@ -1,5 +1,6 @@
 package realm;
 
+import dao.UserDao;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -10,18 +11,17 @@ import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import po.User;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import javax.annotation.Resource;
+import java.util.*;
 
 public class CustomRealm extends AuthorizingRealm {
-    Map<String,String> usermap = new HashMap<String, String>();
-    {
-        usermap.put("sa","f647e02a69ab0e51780373f86f89a12a");
-        super.setName("custom");
-    }
+
+    @Resource
+    private UserDao userDao;
+
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         // 获得认证数据中的用户名
         String username = (String) principals.getPrimaryPrincipal();
@@ -43,9 +43,8 @@ public class CustomRealm extends AuthorizingRealm {
     }
 
     private Set<String> getUserRolesByName(String username) {
-        Set<String> roles = new HashSet<String>();
-        roles.add("admin");
-        roles.add("user");
+        List<String> list = userDao.getRolesByName(username);
+        Set<String> roles = new HashSet<String>(list);
         return roles;
     }
 
@@ -58,17 +57,22 @@ public class CustomRealm extends AuthorizingRealm {
         if(passwd == null){
             return null;
         }
-        SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo("sa",passwd,"custom");
-        authenticationInfo.setCredentialsSalt(ByteSource.Util.bytes("sa"));
+        SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(username,passwd,"custom");
+        authenticationInfo.setCredentialsSalt(ByteSource.Util.bytes(username));
         return authenticationInfo;
     }
 
     private String getUserPasswdByName(String name) {
-        return usermap.get(name);
+
+        User user = userDao.getUserByName(name);
+        if(user != null){
+            return user.getPassward();
+        }
+        return null;
     }
 
     public static void main(String[] args) {
-        Md5Hash md5Hash = new Md5Hash("123","sa");
+        Md5Hash md5Hash = new Md5Hash("what","what");
         System.out.println(md5Hash.toString());
     }
 }

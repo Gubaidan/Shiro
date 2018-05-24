@@ -13,9 +13,10 @@ public class JdbcRealmTest {
 
     DruidDataSource druidDataSource = new DruidDataSource();
     {
-        druidDataSource.setUrl("jdbc:sqlserver://172.16.135.18:1433;databaseName=RedPolicy");
-        druidDataSource.setUsername("sa");
-        druidDataSource.setPassword("123");
+        druidDataSource.setUrl("jdbc:mysql://172.16.135.6:3306/shiro");
+        druidDataSource.setUsername("root");
+        druidDataSource.setPassword("10086");
+
     }
 
 
@@ -23,6 +24,7 @@ public class JdbcRealmTest {
     public void TestIniRealm(){
         JdbcRealm jdbcRealm = new JdbcRealm();
         jdbcRealm.setDataSource(druidDataSource);
+        jdbcRealm.setPermissionsLookupEnabled(true);
         //1、SecurityManager 环境
         DefaultSecurityManager defaultSecurityManager = new DefaultSecurityManager();
         defaultSecurityManager.setRealm(jdbcRealm);
@@ -40,7 +42,7 @@ public class JdbcRealmTest {
 
         subject.checkRole("admin");
 
-        subject.checkPermission("user:delete");
+        subject.checkPermission("delete");
 
     }
 }
