@@ -3,6 +3,7 @@ package controller;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
@@ -43,6 +44,20 @@ public class userController {
     @RequestMapping(value = "/testRole1" , method = RequestMethod.GET)
     @ResponseBody
     public String testEole1(){
+        return "role success";
+    }
+
+    @RequiresPermissions("delete")
+    @RequestMapping(value = "/testPermission" , method = RequestMethod.GET)
+    @ResponseBody
+    public String testPermission(){
+        return "role success";
+    }
+
+    @RequiresPermissions("delete1")
+    @RequestMapping(value = "/testPermission1" , method = RequestMethod.GET)
+    @ResponseBody
+    public String testPermission1(){
         return "role success";
     }
 }

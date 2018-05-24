@@ -25,9 +25,14 @@ public class CustomRealm extends AuthorizingRealm {
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         // 获得认证数据中的用户名
         String username = (String) principals.getPrimaryPrincipal();
+        Set<String> permissions = new HashSet<>();
         Set<String> roles = getUserRolesByName(username);
+        for(String s:roles){
+            Set<String> tem = getUserPermissionByName(s);
+            permissions.addAll(tem);
+        }
 
-        Set<String> permissions = getUserPermissionByName(username);
+
 
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
         authorizationInfo.setStringPermissions(permissions);
@@ -36,9 +41,8 @@ public class CustomRealm extends AuthorizingRealm {
     }
 
     private Set<String> getUserPermissionByName(String username) {
-        Set<String> permission = new HashSet<String>();
-        permission.add("user:add");
-        permission.add("user:delete");
+        List<String> list = userDao.getPermissionByName(username);
+        Set<String> permission = new HashSet<String>(list);
         return  permission;
     }
 

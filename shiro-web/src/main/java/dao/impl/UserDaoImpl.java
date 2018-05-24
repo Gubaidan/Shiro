@@ -49,4 +49,20 @@ public class UserDaoImpl implements UserDao {
         }
         return list;
     }
+
+    @Override
+    public List<String> getPermissionByName(String userRole) {
+        String sql = "select permission from roles_permissions where role_name = ?";
+        List<String> list = jdbcTemplate.query(sql,  new String[]{userRole},new RowMapper<String>() {
+            @Override
+            public String mapRow(ResultSet resultSet, int i) throws SQLException {
+
+                return resultSet.getString("permission");
+            }
+        });
+        if(CollectionUtils.isEmpty(list)){
+            return null;
+        }
+        return list;
+    }
 }
