@@ -32,6 +32,8 @@
         <property name="sessionManager" ref="sessionManager"/>
         <!--自定义cacheManager-->
         <property name="cacheManager" ref="cacheManager"/>
+        <!--Shiro 自带rememberMe-->
+        <property name="rememberMeManager" ref="cookieRememberMeManager"/>
     </bean>
 
     <!--DefaultSessionManager-->
@@ -65,5 +67,16 @@
 
     <!--自定义cacheManager-->
     <bean class="cache.RedisCacheManager" id="cacheManager"/>
+
+    <!--Shiro自带的CookieRememberMeManager-->
+    <bean class="org.apache.shiro.web.mgt.CookieRememberMeManager" id="cookieRememberMeManager">
+        <property name="cookie" ref="simpleCookie"/>
+    </bean>
+
+    <!--Shiro 自带 cookie对象-->
+    <bean class="org.apache.shiro.web.servlet.SimpleCookie" id="simpleCookie">
+        <constructor-arg value="rememberMe"/>
+        <property name="maxAge" value="20000"/>
+    </bean>
 
 </beans>

@@ -19,10 +19,12 @@ public class userController {
     @RequestMapping(value = "/subLogin" , method = RequestMethod.POST,
     produces = "application/json;charset=utf-8")
     @ResponseBody
-    public String subLogin(User user){
+    public String subLogin(User user,Boolean rememberMe){
         Subject subject = SecurityUtils.getSubject();
         UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(user.getUsername(), user.getPassward());
+
         try {
+            usernamePasswordToken.setRememberMe(rememberMe);
             subject.login(usernamePasswordToken);
         }catch (AuthenticationException e){
             return e.getMessage();
