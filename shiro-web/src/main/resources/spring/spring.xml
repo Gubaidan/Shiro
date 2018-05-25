@@ -22,12 +22,16 @@
             </value>
         </property>
     </bean>
+
+
     <!--创建SecurityMananger对象-->
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
         <!--设置自定义Realm-->
         <property name="realm" ref="realm"/>
         <!--自定义Session Manager-->
         <property name="sessionManager" ref="sessionManager"/>
+        <!--自定义cacheManager-->
+        <property name="cacheManager" ref="cacheManager"/>
     </bean>
 
     <!--DefaultSessionManager-->
@@ -35,6 +39,7 @@
         <!--<property name="sessionDAO" ref="redisSessionDao"/>-->
     <!--</bean>-->
 
+    <!--自定义SessionManager-->
     <bean class="session.CustomSessionManager" id="sessionManager">
         <property name="sessionDAO" ref="redisSessionDao"/>
     </bean>
@@ -57,5 +62,8 @@
         <property name="hashAlgorithmName" value="md5"/>
         <property name="hashIterations" value="1"/>
     </bean>
+
+    <!--自定义cacheManager-->
+    <bean class="cache.RedisCacheManager" id="cacheManager"/>
 
 </beans>
