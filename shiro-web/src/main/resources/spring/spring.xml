@@ -4,8 +4,11 @@
        xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-    <import resource="spring-dao"/>
+    <import resource="spring-dao.xml"/>
+    <import resource="spring-redis.xml"/>
+
     <context:component-scan base-package="dao" />
+
 
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
         <property name="securityManager" ref="securityManager"/>
@@ -23,7 +26,25 @@
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
         <!--设置自定义Realm-->
         <property name="realm" ref="realm"/>
+        <!--自定义Session Manager-->
+        <property name="sessionManager" ref="sessionManager"/>
     </bean>
+
+    <!--DefaultSessionManager-->
+    <!--<bean class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager" id="sessionManager">-->
+        <!--<property name="sessionDAO" ref="redisSessionDao"/>-->
+    <!--</bean>-->
+
+    <bean class="session.CustomSessionManager" id="sessionManager">
+        <property name="sessionDAO" ref="redisSessionDao"/>
+    </bean>
+
+    <!--自定义SessionDAO-->
+    <bean class="session.RedisSessionDao" id="redisSessionDao"/>
+
+    <!--自定义过滤器-->
+    <bean class="filter.RolesOrFilter" id="rolesOrFilter"/>
+
 
     <!--定义自定义的Realm-->
     <bean id="realm" class="realm.CustomRealm">
@@ -36,4 +57,5 @@
         <property name="hashAlgorithmName" value="md5"/>
         <property name="hashIterations" value="1"/>
     </bean>
+
 </beans>
